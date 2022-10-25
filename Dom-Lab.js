@@ -78,7 +78,7 @@ menuLinks.forEach(function (obj) {
 
 // Select and cache the <nav id="sub-menu">element in a variable named subMenuEl.
 
-const subMenuEl = document.getElementById("sub-menu")
+let subMenuEl = document.getElementById("sub-menu")
 
 
 // Set the height subMenuElelement to be 100%.
@@ -109,7 +109,7 @@ subMenuEl.style.top = '0'
 // Select and cache the all of the <a>elements inside of topMenuElin a variable named topMenuLinks.
 
 const topMenuLinks = document.querySelectorAll('a')
-console.log(topMenuLinks)
+// console.log(topMenuLinks)
 
 // Declare a global showingSubMenuvariable and initialize it to false;
 
@@ -117,9 +117,12 @@ let showingSubMenu = false
 
 // Attach a delegated 'click' event listener to topMenuEl.
 
+
 topMenuEl.addEventListener('click', (evt) => {
   evt.preventDefault()
+
   let link = evt.target
+
   // console.log(link.tagName)
 
   if (link.tagName !== 'A') {
@@ -137,31 +140,98 @@ topMenuEl.addEventListener('click', (evt) => {
   }
   topMenuLinks.forEach((arg) => {
     arg.classList.remove('active');
-    console.log(arg);
+    // console.log(arg)
   })
 
 
 
-
+  let currentLink = {}
   for (let i = 0; i < menuLinks.length; i++) {
-    console.log('menuLinks')
+    if (link.textContent === menuLinks[i].text) {
+      showingSubMenu = menuLinks[i].hasOwnProperty('subLinks')
+      currentLink = menuLinks[i]
+      console.log(menuLinks[i])
 
-    console.log(menuLinks[i])
-    // console.log(menuLinks[i].subLinks)
-
-    console.log(menuLinks[i].hasOwnProperty('subLinks'))
-
-
-    showingSubMenu = menuLinks[i].hasOwnProperty('subLinks')
-    if (menuLinks[i].hasOwnProperty('subLinks')) {
-
-      console.log(menuLinks[i].subLinks)
     }
+  }
 
+
+  // console.log('menuLinks')
+
+  // console.log(menuLinks[i])
+  // console.log(menuLinks[i].subLinks)
+  // console.log(menuLinks[i].hasOwnProperty('subLinks'))
+
+
+
+  if (showingSubMenu === true) {
+    subMenuEl.style.top = "100%"
+    buildSubMenu(currentLink)
+  }
+  else {
+    subMenuEl.style.top = "0%"
+  }
+
+
+
+
+
+
+  function buildSubMenu() {
+    subMenuEl.innerHTML = ""
+    currentLink.subLinks.forEach(function (link) {
+      let b = document.createElement('a')
+      b.setAttribute('href', link.href)
+      b.textContent = link.text
+      subMenuEl.append(b)
+      console.log(b)
+
+    })
+
+  }
+
+  if (link.text === 'about'){
+    mainEl.innerHTML = `<h1>${evt.target.text}</h1`;
   }
 
 
 })
+
+subMenuEl.addEventListener('click', (evt) => {
+  evt.preventDefault()
+
+
+  if (evt.target.tagName !== 'A') {
+    console.log('Still in event listener')
+
+    return
+
+  }
+  showingSubMenu = false
+  subMenuEl.style.top = '0'
+
+  topMenuLinks.forEach((arg) => {
+    arg.classList.remove('active');
+
+
+    // console.log(arg)
+  })
+  mainEl.innerHTML = `<h1>${evt.target.text}</h1`;
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

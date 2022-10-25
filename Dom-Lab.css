@@ -16,6 +16,7 @@ body {
   display: grid;
   grid-template-rows: 3rem auto;
   color: white;
+  
 }
 
 .flex-ctr {
